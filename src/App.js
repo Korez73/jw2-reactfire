@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import { useState } from "react";
 import Navbar from "./components/Navbar";
 import Card from "./components/Card";
 import './App.css';
@@ -13,13 +14,20 @@ const photos = [
 ]
 
 function App() {
+  const [items, setItems] = useState(photos); //use state returns an array of the "state" we pass in, and a function to manipulate it
+  const [isCollapsed, collapse] = useState(false);
+  const toggle = () => {
+    collapse(!isCollapsed);
+  }
   return (
     <>
     <Navbar />
     <div className="container text-center mt-5">
+    <button className="btn btn-warning mx-2" onClick={() => setItems([ 'https://picsum.photos/id/1009/200/200',...items])}>+Add</button>
+      <button className="btn btn-success" onClick={toggle}>collapse</button>
       <h1>Gallery</h1>
       <div className="row">
-        {photos.map((photo) => <Card src={photo} />)}
+        {items.map((photo, index) => <Card key={index} src={photo}/>)}
       </div>
     </div>
     </>
