@@ -15,8 +15,14 @@ const photos = [
 ]
 
 function App() {
+  const [input, setInput] = useState();
   const [items, setItems] = useState(photos); //use state returns an array of the "state" we pass in, and a function to manipulate it
   const [isCollapsed, collapse] = useState(false);
+  const handleOnChange = (e) => setInput(e.target.value)
+  const handleOnSubmit = (e) => {
+    e.preventDefault()
+    setItems([input, ...items]) 
+  }
   const toggle = () => {
     collapse(!isCollapsed);
   }
@@ -26,7 +32,11 @@ function App() {
     <div className="container text-center mt-5">
       <button className="btn btn-success float-end" onClick={toggle}>{isCollapsed ? 'Close' : '+ Add'}</button>
       <div className="clearfix mb-4"></div>
-      <UploadForm isVisible={isCollapsed} />
+      <UploadForm 
+        isVisible={isCollapsed} 
+        onChange={handleOnChange} 
+        onSubmit={handleOnSubmit}
+      />
       <h1>Gallery</h1>
       <div className="row">
         {items.map((photo, index) => <Card key={index} src={photo}/>)}
