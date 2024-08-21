@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import Card from "./components/Card";
 import UploadForm from "./components/UploadForm";
@@ -15,6 +15,7 @@ const photos = [
 ]
 
 function App() {
+  const [count, setCount] = useState();
   const [inputs, setInputs] = useState({ title: null, file: null, path: null});
   const [items, setItems] = useState(photos); //use state returns an array of the "state" we pass in, and a function to manipulate it
   const [isCollapsed, collapse] = useState(false);
@@ -25,13 +26,16 @@ function App() {
       setInputs({...inputs, title: e.target.value} )
     }
   }
+  const toggle = () => collapse(!isCollapsed);
   const handleOnSubmit = (e) => {
     e.preventDefault()
     setItems([inputs.path, ...items]) 
   }
-  const toggle = () => {
-    collapse(!isCollapsed);
-  }
+
+  //useEffect takes two params, a callback function and a list of dependencies.
+  useEffect(() => {
+    setCount(`${items.length} image${items.length > 1 ? 's':''}`)
+  }, [items])
   return (
     <>
     <Navbar />
@@ -43,7 +47,7 @@ function App() {
         onChange={handleOnChange} 
         onSubmit={handleOnSubmit}
       />
-      <h1>Gallery</h1>
+      <h1>Gallery ({count})</h1>
       <div className="row">
         {items.map((photo, index) => <Card key={index} src={photo}/>)}
       </div>
