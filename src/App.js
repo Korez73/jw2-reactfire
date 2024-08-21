@@ -15,13 +15,19 @@ const photos = [
 ]
 
 function App() {
-  const [input, setInput] = useState();
+  const [inputs, setInputs] = useState({ title: null, file: null, path: null});
   const [items, setItems] = useState(photos); //use state returns an array of the "state" we pass in, and a function to manipulate it
   const [isCollapsed, collapse] = useState(false);
-  const handleOnChange = (e) => setInput(e.target.value)
+  const handleOnChange = (e) => {
+    if(e.target.name === 'file') {
+      setInputs({...inputs, file: e.target.files[0], path: URL.createObjectURL(e.target.files[0])}) 
+    } else {
+      setInputs({...inputs, title: e.target.value} )
+    }
+  }
   const handleOnSubmit = (e) => {
     e.preventDefault()
-    setItems([input, ...items]) 
+    setItems([inputs.path, ...items]) 
   }
   const toggle = () => {
     collapse(!isCollapsed);
