@@ -1,8 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useState, useEffect, useReducer } from "react";
-import Navbar from "./components/Navbar";
+import { useMemo, useReducer } from "react";
 import Card from "./components/Card";
-import UploadForm from "./components/UploadForm";
+import Layout from "./components/Layout"
 import "./App.css";
 
 const photos = []
@@ -13,14 +12,12 @@ const initialState = {
   inputs: { title: null, file: null, path: null},
   isCollapsed: false
 }
-
 const handleOnChange = (state, e) => {
   if (e.target.name === 'file') {
     return { ...state.inputs, file: e.target.files[0], path: URL.createObjectURL(e.target.files[0])}
   } else {
-    return { ...state.inputs, title: e.target.value}
+    return {...state.inputs, title: e.target.value}
   }
-
 }
 
 function reducer(state, action) {
@@ -28,7 +25,9 @@ function reducer(state, action) {
     case 'setItem':
       return {
         ...state,
-        items: [state.inputs, ...state.items]
+        items: [state.inputs, ...state.items],
+        count: state.items.length + 1, 
+        inputs: { title: null, file: null, path: null}
       }
     case "setInputs":
       return {
@@ -40,14 +39,12 @@ function reducer(state, action) {
         ...state,
         isCollapsed: action.payload.bool
       }
-      
     default : return state
   }
 }
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState)
-  const [count, setCount] = useState()
   const toggle = (bool) => dispatch({type: "collapse", payload: { bool }})
   const handleOnChange = (e) => dispatch({type: 'setInputs', payload: {value: e}})
   const handleOnSubmit = (e) => {
@@ -55,28 +52,22 @@ function App() {
     dispatch({ type: 'setItem'})
     toggle(!state.isCollapsed)
   }
-  //useEffect takes two params, a callback function and a list of dependencies.
-  useEffect(() => {
-    setCount(`${state.items.length} image${state.items.length > 1 ? 's':''}`)
+  const count = useMemo(() => {
+    return `${state.items.length} image${state.items.length > 1 ? 's':''}`
   }, [state.items])
+
   return (
-    <>
-    <Navbar />
-    <div className="container text-center mt-5">
-      <button className="btn btn-success float-end" onClick={() => toggle(!state.isCollapsed)}>{state.isCollapsed ? 'Close' : '+ Add'}</button>
-      <div className="clearfix mb-4"></div>
-      <UploadForm 
-        inputs={state.inputs}
-        isVisible={state.isCollapsed} 
-        onChange={handleOnChange} 
-        onSubmit={handleOnSubmit}
-      />
-      <h1>Gallery ({count})</h1>
+    <Layout 
+      state={state} 
+      onChange={handleOnChange} 
+      onSubmit={handleOnSubmit}
+      toggle={toggle}
+      >
+      <h1 className="text-center">Gallery ({count})</h1>
       <div className="row">
-        {state.items.map((photo, index) => <Card key={index} src={photo.path}/>)}
+        {state.items.map((item, index) => <Card key={index} {...item}/>)}
       </div>
-    </div>
-    </>
+    </Layout>
   );
 
 }
