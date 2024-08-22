@@ -30,6 +30,8 @@ function App() {
   const handleOnSubmit = (e) => {
     e.preventDefault()
     setItems([inputs.path, ...items]) 
+    setInputs({ title: null, file: null, path: null})
+    collapse(false);
   }
 
   //useEffect takes two params, a callback function and a list of dependencies.
