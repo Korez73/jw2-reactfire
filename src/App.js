@@ -1,38 +1,56 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import Navbar from "./components/Navbar";
 import Card from "./components/Card";
 import UploadForm from "./components/UploadForm";
-import './App.css';
+import "./App.css";
 
-const photos = [
-  'https://picsum.photos/id/1001/200/200', 
-  'https://picsum.photos/id/1002/200/200', 
-  'https://picsum.photos/id/1003/200/200', 
-  'https://picsum.photos/id/1004/200/200', 
-  'https://picsum.photos/id/1005/200/200', 
-  'https://picsum.photos/id/1006/200/200'
-]
+const photos = []
+
+const initialState = {
+  items: photos,
+  count: photos.length,
+  inputs: { title: null, file: null, path: null},
+  isCollapsed: false
+}
+
+function reducer(state, action) {
+  switch(action.type  ) {
+    case 'setItem':
+      return {
+        ...state,
+        items: [action.payload.path, ...state.items]
+      }
+    default : return state
+  }
+}
 
 function App() {
-  const [count, setCount] = useState();
+  const [state, dispatch] = useReducer(reducer, initialState)
+  const [count, setCount] = useState()
   const [inputs, setInputs] = useState({ title: null, file: null, path: null});
   const [items, setItems] = useState(photos); //use state returns an array of the "state" we pass in, and a function to work with it
   const [isCollapsed, collapse] = useState(false);
-  const handleOnChange = (e) => {
-    if(e.target.name === 'file') {
-      setInputs({...inputs, file: e.target.files[0], path: URL.createObjectURL(e.target.files[0])}) 
-    } else {
-      setInputs({...inputs, title: e.target.value} )
-    }
-  }
   const toggle = () => collapse(!isCollapsed);
+  const handleOnChange = (e) => {
+    if (e.target.name === 'file') {
+      setInputs({ ...inputs, file: e.target.files[0], path: URL.createObjectURL(e.target.files[0])}) 
+    } else {
+      setInputs({...inputs, title: e.target.value})
+    }
+
+  }
   const handleOnSubmit = (e) => {
     e.preventDefault()
-    setItems([inputs.path, ...items]) 
+    //setItems([inputs.path, ...items]) 
+    dispatch({ type: 'setItem', payload: { path : inputs}})
     setInputs({ title: null, file: null, path: null})
-    collapse(false);
+    collapse(false)
   }
+
+  useEffect(() => {
+    console.log(state)
+  }, [state.items])
 
   //useEffect takes two params, a callback function and a list of dependencies.
   useEffect(() => {
@@ -52,11 +70,11 @@ function App() {
       />
       <h1>Gallery ({count})</h1>
       <div className="row">
-        {items.map((photo, index) => <Card key={index} src={photo}/>)}
+        {state.items.map((photo, index) => <Card key={index} src={photo.path}/>)}
       </div>
     </div>
     </>
   );
-}
 
+}
 export default App;
