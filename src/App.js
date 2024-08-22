@@ -17,7 +17,7 @@ const photos = [
 function App() {
   const [count, setCount] = useState();
   const [inputs, setInputs] = useState({ title: null, file: null, path: null});
-  const [items, setItems] = useState(photos); //use state returns an array of the "state" we pass in, and a function to manipulate it
+  const [items, setItems] = useState(photos); //use state returns an array of the "state" we pass in, and a function to work with it
   const [isCollapsed, collapse] = useState(false);
   const handleOnChange = (e) => {
     if(e.target.name === 'file') {
@@ -43,6 +43,7 @@ function App() {
       <button className="btn btn-success float-end" onClick={toggle}>{isCollapsed ? 'Close' : '+ Add'}</button>
       <div className="clearfix mb-4"></div>
       <UploadForm 
+        inputs={inputs}
         isVisible={isCollapsed} 
         onChange={handleOnChange} 
         onSubmit={handleOnSubmit}
