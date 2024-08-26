@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useMemo, useContext } from "react";
+import { useMemo, useContext, useEffect } from "react";
+import app from "./lib/firebase.config"
 import { Context } from "./context"
 import Card from "./components/Card";
 import Layout from "./components/Layout"
@@ -11,7 +12,9 @@ function App() {
   const count = useMemo(() => {
     return `${state.items.length} image${state.items.length > 1 ? 's':''}`
   }, [state.items])
-
+  useEffect(() => {
+    app()
+  }, []);
   return (
     <Layout>
       <h1 className="text-center">Gallery ({count})</h1>
