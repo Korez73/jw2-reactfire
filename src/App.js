@@ -1,9 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useMemo, useContext, useEffect } from "react";
+import {  useMemo, useContext, useEffect } from "react";
 import { Context } from "./context"
+import Firestore from "./handlers/firestore";
 import Card from "./components/Card";
-import Layout from "./components/Layout"
+import Layout from "./components/Layout";
 import "./App.css";
+
+const { readDocs } = Firestore
 
 
 function App() {
@@ -11,6 +14,11 @@ function App() {
   const count = useMemo(() => {
     return `${state.items.length} image${state.items.length > 1 ? 's':''}`
   }, [state.items])
+
+  useEffect(() => {
+    readDocs().then(console.log)
+  }, [])
+
   return (
     <Layout>
       <h1 className="text-center">Gallery ({count})</h1>
