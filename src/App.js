@@ -6,17 +6,17 @@ import Card from "./components/Card";
 import Layout from "./components/Layout";
 import "./App.css";
 
-const { readDocs } = Firestore
+
 
 
 function App() {
-  const { state } = useContext(Context)
+  const { state, read } = useContext(Context)
   const count = useMemo(() => {
     return `${state.items.length} image${state.items.length > 1 ? 's':''}`
   }, [state.items])
 
   useEffect(() => {
-    readDocs().then(console.log)
+    read()
   }, [])
 
   return (
