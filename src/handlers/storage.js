@@ -1,4 +1,4 @@
-import { ref, uploadBytes } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../lib/firebase.config";
 
 const Storage = {
@@ -15,6 +15,18 @@ const Storage = {
         console.error(e)
       }
     })
+  },
+  downloadFile: (media) => {
+    return new Promise(async resolve => {
+      try {
+        const mediaRef = ref(storage, media.path)
+        const fileURL = await getDownloadURL(mediaRef)
+        resolve(fileURL)
+      } catch(e) {
+        console.error(e)
+      }
+    })
   }
+  
 }
 export default Storage
