@@ -4,10 +4,8 @@ import { Context } from "./context/FirestoreContext"
 import Firestore from "./handlers/firestore";
 import { useAuthContext } from "./context/AuthContext"
 import Card from "./components/Card";
-import Layout from "./components/Layout";
+import List from "./components/List"
 import "./App.css";
-
-
 
 
 function App() {
@@ -23,12 +21,10 @@ function App() {
   }, [])
 
   return (
-    <Layout>
+    <>
       <h1 className="text-center">Gallery ({count})</h1>
-      <div className="row">
-        {state.items.map((item, index) => <Card key={index} {...item}/>)}
-      </div>
-    </Layout>
+      <List items={state.items} />
+    </>
   );
 
 }
