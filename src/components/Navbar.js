@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import { useMemo } from "react";
 import { useAuthContext } from "../context/AuthContext"
 
 const LogIn = () => {
@@ -51,6 +52,17 @@ function SearchForm() {
 }
 
 function Dropdown() {
+  const { currentUser } = useAuthContext()
+
+  const username = useMemo(() => {
+    return currentUser?.displayName || "Profile"
+  }, [currentUser])
+
+  const avatar = useMemo(() => {
+    return !!currentUser ? 
+    <img className="avatar" src={currentUser?.photoURL} alt={currentUser?.displayName } width="34" height="34"/> : 
+    "Login"
+  }, [currentUser])
   return( <ul className="navbar-nav mb-2 mb-lg-0">
   {" "}
   {/* remove ms-auto */}
@@ -63,12 +75,12 @@ function Dropdown() {
       data-bs-toggle="dropdown"
       aria-expanded="false"
     >
-      Login
+      {avatar}
     </a>
     <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
       <li>
         <a className="dropdown-item text-center" href="#">
-          Profile
+          {username}
         </a>
         <li><hr className="dropdown divider"/></li>
       </li>
