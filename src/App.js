@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import {  useMemo, useContext, useEffect } from "react";
-import { Context } from "./context"
+import { Context } from "./context/FirestoreContext"
 import Firestore from "./handlers/firestore";
 import Card from "./components/Card";
 import Layout from "./components/Layout";
