@@ -26,7 +26,7 @@ const Preview = () => {
 };
 
 const UploadForm = () => {
-  const { dispatch, state } = useContext(Context)
+  const { dispatch, state, read } = useContext(Context)
   const { currentUser } = useAuthContext()
   const { isCollapsed : isVisible, inputs  } = state // destructuring the current state
 
@@ -39,7 +39,7 @@ const UploadForm = () => {
     .then(downloadFile)
     .then(url => {
       writeDoc({...inputs, path: url, user: username.toLowerCase()}, "stocks").then(() => {
-        dispatch({ type: 'setItem'})
+        read()
         dispatch({ type: "collapse", payload: { bool: false }})
       })
     })
