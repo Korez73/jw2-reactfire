@@ -33,8 +33,8 @@ function Navigation() {
       </Link>
     </li>
     <li className="nav-item">
-      <Link className="nav-link active" aria-current="page" to="/stocks">
-        My Stocks
+      <Link className="nav-link active" aria-current="page" to="/stockimages">
+        My Stock Images
       </Link>
     </li>    
   </ul>
