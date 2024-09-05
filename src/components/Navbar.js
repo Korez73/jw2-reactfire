@@ -1,31 +1,33 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useMemo } from "react";
-import { Link } from "react-router-dom"
-import { useAuthContext } from "../context/AuthContext"
+import { Link } from "react-router-dom";
+import { useAuthContext } from "../context/AuthContext";
 
 const LogIn = () => {
-  const {login, currentUser } = useAuthContext()
+  const { login, currentUser } = useAuthContext();
   return (
-    !currentUser && 
+    !currentUser && (
     <button type="button" className="btn btn-warning" onClick={login}>
       Login
     </button>
+    )
   );
 };
 
 const LogOut = () => {
-  const {logout, currentUser } = useAuthContext()
+  const { logout, currentUser } = useAuthContext();
   return (
-    !!currentUser && 
+    !!currentUser && (
     <button type="button" className="btn btn-danger" onClick={logout}>
       Logout
     </button>
+    )
   );
  };
 
 function Navigation() {
-  const { currentUser } = useAuthContext()
-  return(
+  const { currentUser } = useAuthContext();
+  return (
     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
     {/* remove all links except HOME */}
     <li className="nav-item">
@@ -34,18 +36,22 @@ function Navigation() {
       </Link>
     </li>
     <li className="nav-item">
-      {currentUser && 
-        <Link className="nav-link active" aria-current="page" to="/stockimages">
+      {currentUser && (
+        <Link 
+          className="nav-link active" 
+          aria-current="page"
+          to="/stockimages"
+        >
           My Stock Images
         </Link>
-      }
+      )}
     </li>    
   </ul>
-  )
+  );
 }
 
 function SearchForm() {
-  return(
+  return (
     <form className="d-flex">
     <input
       className="form-control me-2"
@@ -57,53 +63,67 @@ function SearchForm() {
       Search
     </button>
   </form>
-  )
+  );
 }
 
 function Dropdown() {
-  const { currentUser } = useAuthContext()
+  const { currentUser } = useAuthContext();
 
   const username = useMemo(() => {
-    return currentUser?.displayName || "Profile"
-  }, [currentUser])
+    return currentUser?.displayName || "Profile";
+  }, [currentUser]);
 
   const avatar = useMemo(() => {
-    return !!currentUser ? 
-    <img className="avatar" src={currentUser?.photoURL} alt={currentUser?.displayName } width="34" height="34"/> : 
+    return !!currentUser ? (
+      <img
+        className="avatar" 
+        src={currentUser?.photoURL} 
+        alt={currentUser?.displayName} 
+        width="34" 
+        height="34"
+      />
+    ) : ( 
     "Login"
-  }, [currentUser])
-  return( <ul className="navbar-nav mb-2 mb-lg-0">
-  {" "}
-  {/* remove ms-auto */}
-  <li className="nav-item dropdown">
-    <a
-      className="nav-link dropdown-toggle"
-      href="#"
-      id="navbarDropdown"
-      role="button"
-      data-bs-toggle="dropdown"
-      aria-expanded="false"
-    >
-      {avatar}
-    </a>
-    <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-      <li>
-        <a className="dropdown-item text-center" href="#">
-          {username}
+    );
+  }, [currentUser]);
+  return (
+    <ul className="navbar-nav mb-2 mb-lg-0">
+      {" "}
+      {/* remove ms-auto */}
+      <li className="nav-item dropdown">
+        <a
+          className="nav-link dropdown-toggle"
+          href="#"
+          id="navbarDropdown"
+          role="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          {avatar}
         </a>
-        <li><hr className="dropdown divider"/></li>
+        <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+          {currentUser && (
+            <li>
+              <a className="dropdown-item text-center" href="#">
+                <Link to="/profile">{username}</Link>
+              </a>
+              <li>
+                <hr className="dropdown divider" />
+              </li>
+            </li>
+          )}
+          <div className="d-flex justify-content-center">
+            <LogIn />
+            <LogOut />
+          </div>
+        </ul>
       </li>
-      <div className="d-flex justify-content-center">
-        <LogIn />
-        <LogOut />
-      </div>
     </ul>
-  </li>
-</ul>)
+  );
 }
 
 function Navbar() {
-    return(
+    return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light mb-5">
     <div className="container-fluid">
       <a className="navbar-brand" href="#">
@@ -126,6 +146,7 @@ function Navbar() {
         <Dropdown />
       </div>
     </div>
-    </nav>)
-  }
-  export default Navbar
+    </nav>
+  );
+}
+export default Navbar;
