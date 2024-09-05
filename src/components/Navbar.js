@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext";
 
 const LogIn = () => {
@@ -27,25 +27,41 @@ const LogOut = () => {
 
 function Navigation() {
   const { currentUser } = useAuthContext();
+  const { pathname } = useLocation();
   return (
     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
     {/* remove all links except HOME */}
     <li className="nav-item">
-      <Link className="nav-link active" aria-current="page" to="/">
+      <Link 
+        className={`nav-link ${pathname === "/" ? "active" : ""}`} 
+        aria-current="page" 
+        to="/"
+      >
         Home
       </Link>
     </li>
-    <li className="nav-item">
-      {currentUser && (
-        <Link 
-          className="nav-link active" 
+    {currentUser && (    
+      <li className="nav-item">
+          <Link 
+            className={`nav-link ${pathname === "/stockimages" ? "active" : ""}`}
+            aria-current="page"
+            to="/stockimages"
+          >
+            My Stock Images
+          </Link>
+      </li>
+    )}
+    {currentUser && (
+      <li className="nav-item">
+        <Link
+          className={`nav-link ${pathname === "/profile" ? "active" : ""}`}
           aria-current="page"
-          to="/stockimages"
+          to="/profile"
         >
-          My Stock Images
+          Profile
         </Link>
-      )}
-    </li>    
+      </li>
+    )}
   </ul>
   );
 }
