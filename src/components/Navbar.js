@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useMemo } from "react";
+import { useState, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext";
 
@@ -67,9 +67,16 @@ function Navigation() {
 }
 
 function SearchForm() {
+  const [text, search] = useState(null)
+  const handleOnChange= e => search(e.target.value)
+  const handleOnSubmit = e => {
+    e.preventDefault()
+    console.log(`searching ${text}`)
+  }
   return (
-    <form className="d-flex">
+    <form className="d-flex" onSubmit={handleOnSubmit}>
     <input
+      onChange={handleOnChange}
       className="form-control me-2"
       type="search"
       placeholder="Search"
